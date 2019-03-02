@@ -1,0 +1,33 @@
+pipeline {
+    agent any 
+    stages {
+        stage('delete the repo') { 
+            steps {
+                // getting the code from git
+                sh 'rm -fr /var/lib/jenkins/workspace/maven_pipeline/maven-project'
+                
+            }
+        }
+        stage('get the code') { 
+            steps {
+                // getting the code from git
+                sh 'git clone https://github.com/sanjeevsuman88/maven-project.git'
+                sh '/opt/maven/bin/mvn clean -f maven-project'
+                
+            }
+        }
+        stage('Test the cde') { 
+            steps {
+                //test the build
+                sh '/opt/maven/bin/mvn test -f maven-project'
+                
+            }
+        }
+        stage('Deploy') { 
+            steps {
+                // deploying the code
+                sh '/opt/maven/bin/mvn package -f maven-project'
+            }
+        }
+    }
+}
